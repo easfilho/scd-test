@@ -16,7 +16,7 @@ public class PautaService {
     }
 
     public Pauta incluir(Pauta pauta) {
-        return pautaRepository.incluir(pauta);
+        return pautaRepository.save(pauta);
     }
 
 }

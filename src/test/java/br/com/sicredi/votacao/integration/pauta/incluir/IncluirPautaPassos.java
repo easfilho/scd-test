@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Objects;
+
 public class IncluirPautaPassos extends TestConfig implements Pt {
 
     private ResponseEntity<PautaOutputDto> responseEntity;
@@ -37,7 +39,8 @@ public class IncluirPautaPassos extends TestConfig implements Pt {
 
         Entao("^a pauta deve ser salva$", () -> {
             Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-            Assert.assertEquals(pautaInputDto.getAssunto(), responseEntity.getBody().getAssunto());
+            Assert.assertEquals(pautaInputDto.getAssunto(), Objects.requireNonNull(responseEntity.getBody()).getAssunto());
+            Assert.assertTrue(Objects.requireNonNull(responseEntity.getBody().getId()) > 0L);
         });
     }
 }
