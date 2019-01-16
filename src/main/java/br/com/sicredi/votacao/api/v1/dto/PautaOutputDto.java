@@ -8,6 +8,9 @@ import java.util.List;
 @Getter
 @Setter
 public class PautaOutputDto {
-    String assunto;
-    List<LinkDto> links;
+
+    private Long id;
+    private String assunto;
+    private List<LinkDto> links;
+
 }

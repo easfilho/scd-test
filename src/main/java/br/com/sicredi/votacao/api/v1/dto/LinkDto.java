@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LinkDto {
+class LinkDto {
+
     private String href;
     private String rel;
     private String type;
