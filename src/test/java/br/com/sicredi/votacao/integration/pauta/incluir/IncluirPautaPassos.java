@@ -9,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
@@ -17,6 +18,7 @@ public class IncluirPautaPassos extends TestConfig implements Pt {
 
     private ResponseEntity<PautaOutputDto> responseEntity;
     private PautaInputDto pautaInputDto;
+    private HttpStatus httpStatus;
 
     public IncluirPautaPassos() {
         Before(() -> {
@@ -27,20 +29,36 @@ public class IncluirPautaPassos extends TestConfig implements Pt {
             pautaInputDto.setAssunto(assunto);
         });
 
+        Dado("^uma pauta sem assunto$", () -> {
+            pautaInputDto.setAssunto(null);
+        });
+
         Quando("^incluir a pauta$", () -> {
             RestTemplate restTemplate = new RestTemplate();
             String url = "http://localhost:8080/v1/pautas";
             HttpEntity<PautaInputDto> request = new HttpEntity<>(pautaInputDto);
-            responseEntity = restTemplate.exchange(url,
-                    HttpMethod.POST,
-                    request,
-                    PautaOutputDto.class);
+            try {
+                responseEntity = restTemplate.exchange(url,
+                        HttpMethod.POST,
+                        request,
+                        PautaOutputDto.class);
+                httpStatus = responseEntity.getStatusCode();
+            } catch (HttpClientErrorException e) {
+                httpStatus = e.getStatusCode();
+            }
         });
 
         Entao("^a pauta deve ser salva$", () -> {
-            Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
             Assert.assertEquals(pautaInputDto.getAssunto(), Objects.requireNonNull(responseEntity.getBody()).getAssunto());
             Assert.assertTrue(Objects.requireNonNull(responseEntity.getBody().getId()) > 0L);
+        });
+
+        Entao("^a pauta não deve salva$", () -> {
+            Assert.assertNull(responseEntity);
+        });
+
+        Entao("^devo receber um status \"([^\"]*)\"$", (HttpStatus httpStatusEsperado) -> {
+            Assert.assertEquals(httpStatusEsperado, httpStatus);
         });
     }
 }
