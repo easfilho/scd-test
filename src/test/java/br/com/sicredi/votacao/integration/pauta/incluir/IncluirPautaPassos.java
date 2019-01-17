@@ -51,7 +51,7 @@ public class IncluirPautaPassos extends TestConfig implements Pt {
 
         Entao("^a pauta deve ser salva$", () -> {
             Assert.assertEquals(pautaInputDto.getAssunto(), Objects.requireNonNull(responseEntity.getBody()).getAssunto());
-            Assert.assertTrue(Objects.requireNonNull(responseEntity.getBody().getId()) > 0L);
+            Assert.assertTrue(Objects.requireNonNull(responseEntity.getBody().getIdPauta()) > 0L);
         });
 
         Entao("^a pauta não deve salva$", () -> {

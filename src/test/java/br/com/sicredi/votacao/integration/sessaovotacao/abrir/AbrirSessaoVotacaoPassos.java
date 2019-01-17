@@ -66,7 +66,7 @@ public class AbrirSessaoVotacaoPassos extends TestConfig implements Pt {
         });
 
         Entao("^a sessão de votação deve ser aberta$", () -> {
-            Assert.assertTrue(Objects.requireNonNull(responseEntity.getBody()).getId() > 0L);
+            Assert.assertTrue(Objects.requireNonNull(responseEntity.getBody()).getIdSessaoVotacao() > 0L);
         });
 
         Entao("^a data de validade para a votação deve ser a data atual mais o tempo informado$", () -> {

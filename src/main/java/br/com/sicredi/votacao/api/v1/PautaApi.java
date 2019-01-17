@@ -1,7 +1,7 @@
 package br.com.sicredi.votacao.api.v1;
 
 import br.com.sicredi.votacao.api.v1.dto.PautaInputDto;
-import br.com.sicredi.votacao.mapper.Mapper;
+import br.com.sicredi.votacao.factory.PautaOutputDtoFactory;
 import br.com.sicredi.votacao.service.PautaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,19 +17,19 @@ import java.util.stream.Stream;
 public class PautaApi implements v1 {
 
     private PautaService pautaService;
-    private Mapper mapper;
+    private PautaOutputDtoFactory pautaOutputDtoFactory;
 
     @Autowired
-    public PautaApi(PautaService pautaService, Mapper mapper) {
+    public PautaApi(PautaService pautaService, PautaOutputDtoFactory pautaOutputDtoFactory) {
         this.pautaService = pautaService;
-        this.mapper = mapper;
+        this.pautaOutputDtoFactory = pautaOutputDtoFactory;
     }
 
     @PostMapping(value = "/pautas")
     public ResponseEntity<?> incluirPauta(@Valid @RequestBody PautaInputDto pautaInputDto) {
         return Stream.of(pautaInputDto)
                 .map(pautaService::incluir)
-                .map(mapper::mapEntityParaDto)
+                .map(pautaOutputDtoFactory::criar)
                 .map(pautaOutputDto -> ResponseEntity.status(HttpStatus.CREATED).body(pautaOutputDto))
                 .findFirst()
                 .get();

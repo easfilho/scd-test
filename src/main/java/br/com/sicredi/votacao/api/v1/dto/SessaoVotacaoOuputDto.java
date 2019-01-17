@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SessaoVotacaoOuputDto {
-    private Long id;
+    private Long idSessaoVotacao;
     private PautaDto pautaDto;
     private LocalDateTime validade;
 }

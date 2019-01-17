@@ -17,7 +17,7 @@ public class PautaDataProvider {
     }
 
     public Pauta criar() {
-        Pauta pauta = EnhancedRandom.random(Pauta.class, "id");
+        Pauta pauta = EnhancedRandom.random(Pauta.class, "idPauta");
         return pautaRepository.save(pauta);
     }
 }
