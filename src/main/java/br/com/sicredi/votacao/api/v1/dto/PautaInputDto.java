@@ -8,8 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class PautaInputDto {
-
     @NotBlank(message = "O assunto da pauta é obrigatório")
     private String assunto;
-
 }

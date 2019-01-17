@@ -28,7 +28,6 @@ public class PautaApi implements v1 {
     @PostMapping(value = "/pautas")
     public ResponseEntity<?> incluirPauta(@Valid @RequestBody PautaInputDto pautaInputDto) {
         return Stream.of(pautaInputDto)
-                .map(mapper::mapDtoParaEntity)
                 .map(pautaService::incluir)
                 .map(mapper::mapEntityParaDto)
                 .map(pautaOutputDto -> ResponseEntity.status(HttpStatus.CREATED).body(pautaOutputDto))

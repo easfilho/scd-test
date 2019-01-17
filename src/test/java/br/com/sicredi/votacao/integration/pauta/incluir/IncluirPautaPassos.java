@@ -16,6 +16,7 @@ import java.util.Objects;
 
 public class IncluirPautaPassos extends TestConfig implements Pt {
 
+    private final static String URL_INCLUIR_PAUTA = "http://localhost:8080/v1/pautas";
     private ResponseEntity<PautaOutputDto> responseEntity;
     private PautaInputDto pautaInputDto;
     private HttpStatus httpStatus;
@@ -35,10 +36,10 @@ public class IncluirPautaPassos extends TestConfig implements Pt {
 
         Quando("^incluir a pauta$", () -> {
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://localhost:8080/v1/pautas";
             HttpEntity<PautaInputDto> request = new HttpEntity<>(pautaInputDto);
             try {
-                responseEntity = restTemplate.exchange(url,
+                responseEntity = restTemplate.exchange(
+                        URL_INCLUIR_PAUTA,
                         HttpMethod.POST,
                         request,
                         PautaOutputDto.class);

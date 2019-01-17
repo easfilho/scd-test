@@ -1,14 +1,15 @@
 package br.com.sicredi.votacao.api.v1.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
-public class PautaOutputDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class PautaDto {
     private Long id;
     private String assunto;
-    private List<LinkDto> links;
 }

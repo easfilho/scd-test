@@ -1,4 +1,4 @@
-package br.com.sicredi.votacao.integration.pauta.incluir;
+package br.com.sicredi.votacao.integration.sessaovotacao.abrir;
 
 import br.com.sicredi.votacao.VotacaoApplication;
 import cucumber.api.CucumberOptions;
@@ -9,8 +9,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 @RunWith(Cucumber.class)
 @ContextConfiguration(loader = SpringBootContextLoader.class, classes = VotacaoApplication.class)
-@CucumberOptions(features = "src/test/resources/features/pauta/CadastrarPauta.feature",
+@CucumberOptions(features = "src/test/resources/features/voto/AbrirSessaoVotacao.feature",
         strict = true,
-        glue = "br.com.sicredi.votacao.integration.pauta.incluir")
-public class IncluirPautaTest {
+        glue = "br.com.sicredi.votacao.integration.sessaovotacao.abrir")
+public class AbrirSessaoVotacaoTest {
 }
