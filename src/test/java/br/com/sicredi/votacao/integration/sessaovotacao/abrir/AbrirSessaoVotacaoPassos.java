@@ -46,6 +46,10 @@ public class AbrirSessaoVotacaoPassos extends TestConfig implements Pt {
             sessaoVotacaoInputDto.setTempoAberturaSessao(tempoInformado);
         });
 
+        Dado("^que não é inforamdo o tempo de votação$", () -> {
+            sessaoVotacaoInputDto.setTempoAberturaSessao(null);
+        });
+
         Quando("^abrir a sessão de votação$", () -> {
             RestTemplate restTemplate = new RestTemplate();
             String url = formatarUrl(pauta);
@@ -68,6 +72,15 @@ public class AbrirSessaoVotacaoPassos extends TestConfig implements Pt {
         Entao("^a data de validade para a votação deve ser a data atual mais o tempo informado$", () -> {
             LocalDateTime validadeEsperada = LocalDateTime.now().plusHours(tempoInformado.getHour())
                     .plusMinutes(tempoInformado.getMinute());
+            Assert.assertEquals(validadeEsperada.getYear(), responseEntity.getBody().getValidade().getYear());
+            Assert.assertEquals(validadeEsperada.getMonth(), responseEntity.getBody().getValidade().getMonth());
+            Assert.assertEquals(validadeEsperada.getDayOfMonth(), responseEntity.getBody().getValidade().getDayOfMonth());
+            Assert.assertEquals(validadeEsperada.getHour(), responseEntity.getBody().getValidade().getHour());
+            Assert.assertEquals(validadeEsperada.getMinute(), responseEntity.getBody().getValidade().getMinute());
+        });
+
+        Entao("^a data de validade para a votação deve ser a data atual mais (\\d+) minuto$", (Long minutos) -> {
+            LocalDateTime validadeEsperada = LocalDateTime.now().plusMinutes(minutos);
             Assert.assertEquals(validadeEsperada.getYear(), responseEntity.getBody().getValidade().getYear());
             Assert.assertEquals(validadeEsperada.getMonth(), responseEntity.getBody().getValidade().getMonth());
             Assert.assertEquals(validadeEsperada.getDayOfMonth(), responseEntity.getBody().getValidade().getDayOfMonth());
