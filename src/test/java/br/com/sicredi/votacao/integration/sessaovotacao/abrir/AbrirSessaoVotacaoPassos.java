@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -26,6 +27,7 @@ public class AbrirSessaoVotacaoPassos extends TestConfig implements Pt {
     private SessaoVotacaoInputDto sessaoVotacaoInputDto;
     private ResponseEntity<SessaoVotacaoOuputDto> responseEntity;
     private HttpStatus httpStatus;
+    private LocalTime tempoInformado;
     @Autowired
     private PautaDataProvider pautaDataProvider;
     private Pauta pauta;
@@ -40,7 +42,8 @@ public class AbrirSessaoVotacaoPassos extends TestConfig implements Pt {
         });
 
         Dado("^que o tempo de votação é de \"([^\"]*)\"$", (String tempoVotacao) -> {
-            sessaoVotacaoInputDto.setTempoAberturaSessao(LocalTime.parse(tempoVotacao));
+            tempoInformado = LocalTime.parse(tempoVotacao);
+            sessaoVotacaoInputDto.setTempoAberturaSessao(tempoInformado);
         });
 
         Quando("^abrir a sessão de votação$", () -> {
@@ -60,6 +63,16 @@ public class AbrirSessaoVotacaoPassos extends TestConfig implements Pt {
 
         Entao("^a sessão de votação deve ser aberta$", () -> {
             Assert.assertTrue(Objects.requireNonNull(responseEntity.getBody()).getId() > 0L);
+        });
+
+        Entao("^a data de validade para a votação deve ser a data atual mais o tempo informado$", () -> {
+            LocalDateTime validadeEsperada = LocalDateTime.now().plusHours(tempoInformado.getHour())
+                    .plusMinutes(tempoInformado.getMinute());
+            Assert.assertEquals(validadeEsperada.getYear(), responseEntity.getBody().getValidade().getYear());
+            Assert.assertEquals(validadeEsperada.getMonth(), responseEntity.getBody().getValidade().getMonth());
+            Assert.assertEquals(validadeEsperada.getDayOfMonth(), responseEntity.getBody().getValidade().getDayOfMonth());
+            Assert.assertEquals(validadeEsperada.getHour(), responseEntity.getBody().getValidade().getHour());
+            Assert.assertEquals(validadeEsperada.getMinute(), responseEntity.getBody().getValidade().getMinute());
         });
 
         Entao("^devo receber um status \"([^\"]*)\"$", (HttpStatus httpStatusEsperado) -> {

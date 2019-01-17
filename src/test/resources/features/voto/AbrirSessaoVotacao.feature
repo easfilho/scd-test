@@ -10,4 +10,5 @@ Funcionalidade: Abrir Sessão Votação
     E que o tempo de votação é de "12:00"
     Quando abrir a sessão de votação
     Entao a sessão de votação deve ser aberta
+    E a data de validade para a votação deve ser a data atual mais o tempo informado
     E devo receber um status "CREATED"

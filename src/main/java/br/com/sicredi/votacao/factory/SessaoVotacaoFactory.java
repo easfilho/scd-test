@@ -24,10 +24,8 @@ public class SessaoVotacaoFactory {
     }
 
     private LocalDateTime calcularDataValidade(LocalTime tempoAbertuaSessao) {
-        LocalDateTime validade = LocalDateTime.now();
-        Optional.ofNullable(tempoAbertuaSessao)
-                .map(tempo -> validade.plusHours(tempo.getHour()).plusMinutes(tempo.getMinute()))
-                .orElse(validade.plusMinutes(TEMPO_ABERTURA_DEFAULT));
-        return validade;
+        return Optional.ofNullable(tempoAbertuaSessao)
+                .map(tempo -> LocalDateTime.now().plusHours(tempo.getHour()).plusMinutes(tempo.getMinute()))
+                .orElse(LocalDateTime.now().plusMinutes(TEMPO_ABERTURA_DEFAULT));
     }
 }
