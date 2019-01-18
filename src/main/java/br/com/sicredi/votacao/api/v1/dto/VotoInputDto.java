@@ -4,12 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalTime;
-
 @Getter
 @Setter
-public class SessaoVotacaoInputDto {
+public class VotoInputDto {
     @JsonIgnore
-    private Long idPauta;
-    private LocalTime tempoAberturaSessao;
+    private Long idSessaoVotacao;
+    private Long idCooperativado;
+    private Boolean voto;
 }

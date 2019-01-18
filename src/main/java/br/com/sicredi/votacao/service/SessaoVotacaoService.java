@@ -3,24 +3,24 @@ package br.com.sicredi.votacao.service;
 import br.com.sicredi.votacao.api.v1.dto.SessaoVotacaoInputDto;
 import br.com.sicredi.votacao.entity.SessaoVotacao;
 import br.com.sicredi.votacao.factory.SessaoVotacaoFactory;
-import br.com.sicredi.votacao.repository.SessacaoVotacaoRepository;
+import br.com.sicredi.votacao.repository.SessaoVotacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SessaoVotacaoService {
 
-    private SessacaoVotacaoRepository sessacaoVotacaoRepository;
+    private SessaoVotacaoRepository sessaoVotacaoRepository;
     private SessaoVotacaoFactory sessaoVotacaoFactory;
 
     @Autowired
-    public SessaoVotacaoService(SessacaoVotacaoRepository sessacaoVotacaoRepository, SessaoVotacaoFactory sessaoVotacaoFactory) {
-        this.sessacaoVotacaoRepository = sessacaoVotacaoRepository;
+    public SessaoVotacaoService(SessaoVotacaoRepository sessaoVotacaoRepository, SessaoVotacaoFactory sessaoVotacaoFactory) {
+        this.sessaoVotacaoRepository = sessaoVotacaoRepository;
         this.sessaoVotacaoFactory = sessaoVotacaoFactory;
     }
 
     public SessaoVotacao incluir(SessaoVotacaoInputDto sessaoVotacaoInputDto) {
         SessaoVotacao sessaoVotacao = sessaoVotacaoFactory.criar(sessaoVotacaoInputDto);
-        return sessacaoVotacaoRepository.save(sessaoVotacao);
+        return sessaoVotacaoRepository.save(sessaoVotacao);
     }
 }
