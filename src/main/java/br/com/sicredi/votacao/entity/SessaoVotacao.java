@@ -19,4 +19,8 @@ public class SessaoVotacao {
     @JoinColumn(name = "idPauta")
     private Pauta pauta;
     private LocalDateTime validade;
+
+    public Boolean isAberta() {
+        return validade.isAfter(LocalDateTime.now());
+    }
 }

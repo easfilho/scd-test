@@ -45,6 +45,10 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
             sessaoVotacao = sessaoVotacaoDataProvider.criarAberta();
         });
 
+        Dado("^uma sessão de votação fechada$", () -> {
+            sessaoVotacao = sessaoVotacaoDataProvider.criarFechada();
+        });
+
         Dado("^um voto para \"([^\"]*)\"$", (Boolean voto) -> {
             votoInputDto.setVoto(voto);
         });
@@ -69,6 +73,10 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
 
         Entao("^o voto é salvo$", () -> {
             Assert.assertTrue(Objects.requireNonNull(responseEntity.getBody()).getIdVoto() > 0);
+        });
+
+        Entao("^o voto não é salvo$", () -> {
+            Assert.assertNull(responseEntity);
         });
 
         Entao("^devo receber um status \"([^\"]*)\"$", (HttpStatus httpStatusEsperado) -> {

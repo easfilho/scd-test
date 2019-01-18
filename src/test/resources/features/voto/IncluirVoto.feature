@@ -15,3 +15,10 @@ Funcionalidade: Incluir Voto
       | voto  |
       | true  |
       | false |
+
+  Cenario: Deve validar inclusão de voto em uma sessão fechada
+    Dado uma sessão de votação fechada
+    E um voto para "<voto>"
+    Quando incluir o voto
+    Entao o voto não é salvo
+    E devo receber um status "PRECONDITION_FAILED"

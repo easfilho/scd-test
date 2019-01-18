@@ -2,6 +2,7 @@ package br.com.sicredi.votacao.api.v1;
 
 import br.com.sicredi.votacao.api.v1.dto.SessaoVotacaoInputDto;
 import br.com.sicredi.votacao.api.v1.dto.VotoInputDto;
+import br.com.sicredi.votacao.exception.HttpException;
 import br.com.sicredi.votacao.factory.VotoOutputDtoFactory;
 import br.com.sicredi.votacao.mapper.Mapper;
 import br.com.sicredi.votacao.service.SessaoVotacaoService;
@@ -52,14 +53,25 @@ public class VotacaoApi implements v1 {
     @PostMapping(value = "/sessoes-votacao/{idSessaoVotacao}/votos")
     public ResponseEntity<?> incluirVoto(@PathVariable Long idSessaoVotacao,
                                          @RequestBody VotoInputDto votoInputDto) {
-        votoInputDto.setIdSessaoVotacao(idSessaoVotacao);
-        return Stream.of(votoInputDto)
-                .map(votoService::incluir)
-                .map(votoOutputDtoFactory::criar)
-                .map(votoOutputDto -> ResponseEntity
-                        .status(HttpStatus.CREATED)
-                        .body(votoOutputDto))
-                .findFirst()
-                .get();
+        try {
+            votoInputDto.setIdSessaoVotacao(idSessaoVotacao);
+            return Stream.of(votoService.incluir(votoInputDto))
+                    .map(votoOutputDtoFactory::criar)
+                    .map(votoOutputDto -> ResponseEntity
+                            .status(HttpStatus.CREATED)
+                            .body(votoOutputDto))
+                    .findFirst()
+                    .get();
+        } catch (HttpException e) {
+            return Stream.of(e)
+                    .map(exception -> ResponseEntity
+                            .status(exception.getHttpStatus())
+                            .body(exception.getMessage()))
+                    .findFirst()
+                    .get();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
+        }
     }
 }

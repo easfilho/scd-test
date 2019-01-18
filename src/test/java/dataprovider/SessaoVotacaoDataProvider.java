@@ -26,4 +26,12 @@ public class SessaoVotacaoDataProvider {
                 .build();
         return sessaoVotacaoRepository.save(sessaoVotacao);
     }
+
+    public SessaoVotacao criarFechada() {
+        SessaoVotacao sessaoVotacao = SessaoVotacao.builder()
+                .pauta(pautaDataProvider.criar())
+                .validade(LocalDateTime.now().plusHours(-1L))
+                .build();
+        return sessaoVotacaoRepository.save(sessaoVotacao);
+    }
 }
