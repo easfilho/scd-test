@@ -7,7 +7,7 @@ Funcionalidade: Incluir Voto
 
   Esquema do Cenario: Cenario: Deve incluir um voto em uma sessão aberta
     Dado uma sessão de votação aberta
-    E um voto para "voto"
+    E um voto para "<voto>"
     Quando incluir o voto
     Entao o voto é salvo
     E devo receber um status "CREATED"
