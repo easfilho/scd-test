@@ -55,7 +55,7 @@ public class VotoApi implements v1 {
     }
 
     @GetMapping(value = "/sessoes-votacao/{idSessaoVotacao}/contagem-votos")
-    public ResponseEntity<?> incluirVoto(@PathVariable Long idSessaoVotacao) {
+    public ResponseEntity<?> contarVotos(@PathVariable Long idSessaoVotacao) {
         return Stream.of(idSessaoVotacao)
                 .map(votoCooperativadoService::contarVotos)
                 .map(contagemVotosOutputDtoFactory::criar)

@@ -14,3 +14,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+url:
+  validacao:
+    cooperativado: https://user-info.herokuapp.com

@@ -5,6 +5,8 @@ import br.com.sicredi.votacao.api.v1.dto.VotoOutputDto;
 import br.com.sicredi.votacao.entity.Cooperativado;
 import br.com.sicredi.votacao.entity.SessaoVotacao;
 import br.com.sicredi.votacao.integration.TestConfig;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import cucumber.api.java8.Pt;
 import dataprovider.CooperativadoDataProvider;
 import dataprovider.PautaDataProvider;
@@ -12,15 +14,15 @@ import dataprovider.SessaoVotacaoDataProvider;
 import dataprovider.VotoCooperativadoDataProvider;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
 
 @ContextConfiguration(classes = {SessaoVotacaoDataProvider.class,
         PautaDataProvider.class,
@@ -29,6 +31,7 @@ import java.util.Objects;
 public class IncluirVotoPassos extends TestConfig implements Pt {
 
     private final static String URL_INCLUIR_VOTO = "http://localhost:8080/v1/sessoes-votacao/%d/votos";
+    private final static Integer PORT_WIREMOCK = 8097;
     private VotoInputDto votoInputDto;
     private ResponseEntity<VotoOutputDto> responseEntity;
     private HttpStatus httpStatus;
@@ -39,10 +42,17 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
     @Autowired
     private VotoCooperativadoDataProvider votoCooperativadoDataProvider;
     private SessaoVotacao sessaoVotacao;
+    private WireMockServer wireMockServer;
+    private Cooperativado cooperativado;
 
     public IncluirVotoPassos() {
         Before(() -> {
             votoInputDto = new VotoInputDto();
+            inicializarWireMock();
+        });
+
+        After(() -> {
+            wireMockServer.stop();
         });
 
         Dado("^uma sessão de votação aberta$", () -> {
@@ -54,13 +64,21 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
         });
 
         Dado("^um cooperativado que ainda não votou$", () -> {
-            Cooperativado cooperativado = cooperativadoDataProvider.criar();
+            cooperativado = cooperativadoDataProvider.criar();
             votoInputDto.setIdCooperativado(cooperativado.getId());
         });
 
         Dado("^um cooperativado que já votou$", () -> {
-            Cooperativado cooperativado = votoCooperativadoDataProvider.criar(sessaoVotacao).getCooperativado();
+            cooperativado = votoCooperativadoDataProvider.criar(sessaoVotacao).getCooperativado();
             votoInputDto.setIdCooperativado(cooperativado.getId());
+        });
+
+        Dado("^o cooperativado possui um cpf habilitado para votar", () -> {
+            mockarValidacaoCooperativado("ABLE_TO_VOTE");
+        });
+
+        Dado("^o cooperativado possui um cpf não habilitado para votar", () -> {
+            mockarValidacaoCooperativado("UNABLE_TO_VOTE");
         });
 
         Dado("^o cooperativado não é informado$", () -> {
@@ -103,7 +121,21 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
         });
     }
 
+    private void mockarValidacaoCooperativado(String status) {
+        wireMockServer.stubFor(get(WireMock
+                .urlPathEqualTo(String.format("/users/%s", cooperativado.getCpf())))
+                .willReturn(aResponse()
+                        .withBody(String.format("{ \"status\": \"%s\" }", status))
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .withStatus(HttpStatus.OK.value())));
+    }
+
     private String formatarUrl(SessaoVotacao sessaoVotacao) {
         return String.format(URL_INCLUIR_VOTO, sessaoVotacao.getId());
+    }
+
+    private void inicializarWireMock() {
+        wireMockServer = new WireMockServer(PORT_WIREMOCK);
+        wireMockServer.start();
     }
 }
