@@ -21,4 +21,8 @@ public class Voto {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idCooperativado")
     private Cooperativado cooperativado;
+
+    public Boolean foiDeCooperativado(Cooperativado cooperativado) {
+        return this.cooperativado.getId().equals(cooperativado.getId());
+    }
 }

@@ -9,6 +9,7 @@ import cucumber.api.java8.Pt;
 import dataprovider.CooperativadoDataProvider;
 import dataprovider.PautaDataProvider;
 import dataprovider.SessaoVotacaoDataProvider;
+import dataprovider.VotoDataProvider;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -23,7 +24,8 @@ import java.util.Objects;
 
 @ContextConfiguration(classes = {SessaoVotacaoDataProvider.class,
         PautaDataProvider.class,
-        CooperativadoDataProvider.class})
+        CooperativadoDataProvider.class,
+        VotoDataProvider.class})
 public class IncluirVotoPassos extends TestConfig implements Pt {
 
     private final static String URL_INCLUIR_VOTO = "http://localhost:8080/v1/sessoes-votacao/%d/votos";
@@ -34,7 +36,10 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
     private SessaoVotacaoDataProvider sessaoVotacaoDataProvider;
     @Autowired
     private CooperativadoDataProvider cooperativadoDataProvider;
+    @Autowired
+    private VotoDataProvider votoDataProvider;
     private SessaoVotacao sessaoVotacao;
+    private Cooperativado cooperativado;
 
     public IncluirVotoPassos() {
         Before(() -> {
@@ -49,12 +54,19 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
             sessaoVotacao = sessaoVotacaoDataProvider.criarFechada();
         });
 
+        Dado("^um cooperativao que ainda não votou$", () -> {
+            cooperativado = cooperativadoDataProvider.criar();
+        });
+
+        Dado("^um cooperativado que já votou$", () -> {
+            cooperativado = votoDataProvider.criar(sessaoVotacao).getCooperativado();
+        });
+
         Dado("^um voto para \"([^\"]*)\"$", (Boolean voto) -> {
             votoInputDto.setVoto(voto);
         });
 
         Quando("^incluir o voto$", () -> {
-            Cooperativado cooperativado = cooperativadoDataProvider.criar();
             votoInputDto.setIdCooperativado(cooperativado.getId());
 
             RestTemplate restTemplate = new RestTemplate();

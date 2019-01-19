@@ -26,7 +26,7 @@ public class VotoFactory {
 
     public Voto criar(VotoInputDto votoInputDto) throws IllegalStateException {
         Voto voto = Voto.builder()
-                .sessaoVotacao(sessaoVotacaoRepository.findByIdWithPauta(votoInputDto.getIdSessaoVotacao())
+                .sessaoVotacao(sessaoVotacaoRepository.findByIdWithPautaAndVotos(votoInputDto.getIdSessaoVotacao())
                         .orElseThrow(EntityNotFoundException::new))
                 .voto(votoInputDto.getVoto())
                 .cooperativado(cooperativadoRepository.findById(votoInputDto.getIdCooperativado())
@@ -40,5 +40,9 @@ public class VotoFactory {
         Optional.of(voto.getSessaoVotacao())
                 .filter(SessaoVotacao::isAberta)
                 .orElseThrow(() -> new IllegalStateException("Sessão encerrada"));
+
+        Optional.of(voto.getSessaoVotacao())
+                .filter(sessaoVotacao -> sessaoVotacao.cooperativadoAindaNaoVotou(voto.getCooperativado()))
+                .orElseThrow(() -> new IllegalStateException("Cooperativado já votou"));
     }
 }

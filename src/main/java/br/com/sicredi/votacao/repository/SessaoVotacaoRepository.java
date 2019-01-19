@@ -11,7 +11,10 @@ import java.util.Optional;
 @Repository
 public interface SessaoVotacaoRepository extends JpaRepository<SessaoVotacao, Long> {
 
-    @Query("select sessao from SessaoVotacao sessao inner join fetch sessao.pauta " +
-            "where sessao.id = :id")
-    Optional<SessaoVotacao> findByIdWithPauta(@Param("id") Long id);
+    @Query(" select sessao from SessaoVotacao sessao" +
+            " inner join fetch sessao.pauta pauta " +
+            " left join fetch sessao.votos voto " +
+            " inner join fetch voto.cooperativado cooperativado " +
+            " where sessao.id = :id ")
+    Optional<SessaoVotacao> findByIdWithPautaAndVotos(@Param("id") Long id);
 }
