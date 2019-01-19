@@ -28,7 +28,7 @@ public class SessaoVotacao {
     }
 
     public Boolean cooperativadoAindaNaoVotou(Cooperativado cooperativado) {
-        return votos.stream()
+        return votos.isEmpty() || votos.stream()
                 .anyMatch(voto -> !voto.foiDeCooperativado(cooperativado));
     }
 }
