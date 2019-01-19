@@ -30,7 +30,7 @@ public class VotoCooperativadoDataProvider {
 
     public VotoCooperativado criar(SessaoVotacao sessaoVotacao, Boolean voto) {
         VotoCooperativado votoCooperativadoEntity = VotoCooperativado.builder()
-                .voto(true)
+                .voto(voto)
                 .cooperativado(cooperativadoDataProvider.criar())
                 .sessaoVotacao(sessaoVotacao)
                 .build();

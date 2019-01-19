@@ -17,6 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Objects;
+
 @ContextConfiguration(classes = {SessaoVotacaoDataProvider.class,
         PautaDataProvider.class,
         CooperativadoDataProvider.class,
@@ -33,9 +35,6 @@ public class ContarVotosPassos extends TestConfig implements Pt {
     private SessaoVotacao sessaoVotacao;
 
     public ContarVotosPassos() {
-        Before(() -> {
-        });
-
         Dado("^uma sessão de votação$", () -> {
             sessaoVotacao = sessaoVotacaoDataProvider.criarAberta();
         });
@@ -60,12 +59,16 @@ public class ContarVotosPassos extends TestConfig implements Pt {
             }
         });
 
-        Então("^devo receber o total de (\\d+) votos$", (Integer arg1) -> {
-            // Write code here that turns the phrase above into concrete actions
+        Então("^devo receber o total de (\\d+) votos$", (Long totalVotosEsperados) -> {
+            Assert.assertEquals(totalVotosEsperados, Objects.requireNonNull(responseEntity.getBody()).getTotalVotos());
         });
 
-        Então("^devo receber (\\d+) votos para \"([^\"]*)\"$", (Integer arg1, String arg2) -> {
-            // Write code here that turns the phrase above into concrete actions
+        Então("^devo receber (\\d+) votos para \"([^\"]*)\"$", (Long votosEsperados, Boolean voto) -> {
+            if (voto) {
+                Assert.assertEquals(votosEsperados, Objects.requireNonNull(responseEntity.getBody()).getVotosSim());
+            } else {
+                Assert.assertEquals(votosEsperados, Objects.requireNonNull(responseEntity.getBody()).getVotosNao());
+            }
         });
 
         Entao("^devo receber um status \"([^\"]*)\"$", (HttpStatus httpStatusEsperado) -> {

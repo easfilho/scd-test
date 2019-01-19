@@ -2,6 +2,7 @@ package br.com.sicredi.votacao.api.v1;
 
 import br.com.sicredi.votacao.api.v1.dto.VotoInputDto;
 import br.com.sicredi.votacao.exception.HttpException;
+import br.com.sicredi.votacao.factory.ContagemVotosOutputDtoFactory;
 import br.com.sicredi.votacao.factory.VotoOutputDtoFactory;
 import br.com.sicredi.votacao.service.VotoCooperativadoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,15 @@ public class VotoApi implements v1 {
 
     private VotoCooperativadoService votoCooperativadoService;
     private VotoOutputDtoFactory votoOutputDtoFactory;
+    private ContagemVotosOutputDtoFactory contagemVotosOutputDtoFactory;
 
     @Autowired
     public VotoApi(VotoCooperativadoService votoCooperativadoService,
-                   VotoOutputDtoFactory votoOutputDtoFactory) {
+                   VotoOutputDtoFactory votoOutputDtoFactory,
+                   ContagemVotosOutputDtoFactory contagemVotosOutputDtoFactory) {
         this.votoCooperativadoService = votoCooperativadoService;
         this.votoOutputDtoFactory = votoOutputDtoFactory;
+        this.contagemVotosOutputDtoFactory = contagemVotosOutputDtoFactory;
     }
 
     @PostMapping(value = "/sessoes-votacao/{idSessaoVotacao}/votos")
@@ -52,6 +56,11 @@ public class VotoApi implements v1 {
 
     @GetMapping(value = "/sessoes-votacao/{idSessaoVotacao}/contagem-votos")
     public ResponseEntity<?> incluirVoto(@PathVariable Long idSessaoVotacao) {
-        return ResponseEntity.ok().build();
+        return Stream.of(idSessaoVotacao)
+                .map(votoCooperativadoService::contarVotos)
+                .map(contagemVotosOutputDtoFactory::criar)
+                .map(ResponseEntity::ok)
+                .findFirst()
+                .get();
     }
 }
