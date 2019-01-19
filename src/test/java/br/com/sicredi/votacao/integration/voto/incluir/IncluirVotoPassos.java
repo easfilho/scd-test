@@ -53,7 +53,7 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
             sessaoVotacao = sessaoVotacaoDataProvider.criarFechada();
         });
 
-        Dado("^um cooperativao que ainda não votou$", () -> {
+        Dado("^um cooperativado que ainda não votou$", () -> {
             Cooperativado cooperativado = cooperativadoDataProvider.criar();
             votoInputDto.setIdCooperativado(cooperativado.getId());
         });
