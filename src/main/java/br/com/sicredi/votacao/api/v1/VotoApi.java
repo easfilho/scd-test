@@ -3,7 +3,7 @@ package br.com.sicredi.votacao.api.v1;
 import br.com.sicredi.votacao.api.v1.dto.VotoInputDto;
 import br.com.sicredi.votacao.exception.HttpException;
 import br.com.sicredi.votacao.factory.VotoOutputDtoFactory;
-import br.com.sicredi.votacao.service.VotoService;
+import br.com.sicredi.votacao.service.VotoCooperativadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +15,13 @@ import java.util.stream.Stream;
 @RestController
 public class VotoApi implements v1 {
 
-    private VotoService votoService;
+    private VotoCooperativadoService votoCooperativadoService;
     private VotoOutputDtoFactory votoOutputDtoFactory;
 
     @Autowired
-    public VotoApi(VotoService votoService,
+    public VotoApi(VotoCooperativadoService votoCooperativadoService,
                    VotoOutputDtoFactory votoOutputDtoFactory) {
-        this.votoService = votoService;
+        this.votoCooperativadoService = votoCooperativadoService;
         this.votoOutputDtoFactory = votoOutputDtoFactory;
     }
 
@@ -30,7 +30,7 @@ public class VotoApi implements v1 {
                                          @Valid @RequestBody VotoInputDto votoInputDto) {
         try {
             votoInputDto.setIdSessaoVotacao(idSessaoVotacao);
-            return Stream.of(votoService.incluir(votoInputDto))
+            return Stream.of(votoCooperativadoService.incluir(votoInputDto))
                     .map(votoOutputDtoFactory::criar)
                     .map(votoOutputDto -> ResponseEntity
                             .status(HttpStatus.CREATED)

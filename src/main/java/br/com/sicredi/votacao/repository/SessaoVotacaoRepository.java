@@ -13,8 +13,8 @@ public interface SessaoVotacaoRepository extends JpaRepository<SessaoVotacao, Lo
 
     @Query(" select sessao from SessaoVotacao sessao" +
             " inner join fetch sessao.pauta pauta " +
-            " left join fetch sessao.votos voto " +
-            " left join fetch voto.cooperativado cooperativado " +
+            " left join fetch sessao.votosCooperativados votosCooperativados " +
+            " left join fetch votosCooperativados.cooperativado cooperativado " +
             " where sessao.id = :id ")
     Optional<SessaoVotacao> findByIdWithPautaAndVotos(@Param("id") Long id);
 }

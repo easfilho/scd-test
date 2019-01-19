@@ -21,14 +21,14 @@ public class SessaoVotacao {
     private Pauta pauta;
     private LocalDateTime validade;
     @OneToMany(mappedBy = "sessaoVotacao")
-    private List<Voto> votos;
+    private List<VotoCooperativado> votosCooperativados;
 
     public Boolean isAberta() {
         return validade.isAfter(LocalDateTime.now());
     }
 
     public Boolean cooperativadoAindaNaoVotou(Cooperativado cooperativado) {
-        return votos.isEmpty() || votos.stream()
+        return votosCooperativados.isEmpty() || votosCooperativados.stream()
                 .anyMatch(voto -> !voto.foiDeCooperativado(cooperativado));
     }
 }

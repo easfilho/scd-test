@@ -7,7 +7,7 @@ import cucumber.api.java8.Pt;
 import dataprovider.CooperativadoDataProvider;
 import dataprovider.PautaDataProvider;
 import dataprovider.SessaoVotacaoDataProvider;
-import dataprovider.VotoDataProvider;
+import dataprovider.VotoCooperativadoDataProvider;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -20,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 @ContextConfiguration(classes = {SessaoVotacaoDataProvider.class,
         PautaDataProvider.class,
         CooperativadoDataProvider.class,
-        VotoDataProvider.class})
+        VotoCooperativadoDataProvider.class})
 public class ContarVotosPassos extends TestConfig implements Pt {
 
     private final static String URL_CONTAR_VOTOS = "http://localhost:8080/v1/sessoes-votacao/%d/contagem-votos";
@@ -29,7 +29,7 @@ public class ContarVotosPassos extends TestConfig implements Pt {
     @Autowired
     private SessaoVotacaoDataProvider sessaoVotacaoDataProvider;
     @Autowired
-    private VotoDataProvider votoDataProvider;
+    private VotoCooperativadoDataProvider votoCooperativadoDataProvider;
     private SessaoVotacao sessaoVotacao;
 
     public ContarVotosPassos() {
@@ -42,7 +42,7 @@ public class ContarVotosPassos extends TestConfig implements Pt {
 
         Dado("^que existem (\\d+) votos para \"([^\"]*)\"$", (Integer numeroVotos, Boolean voto) -> {
             for (int i = 0; i < numeroVotos; i++) {
-                votoDataProvider.criar(sessaoVotacao, voto);
+                votoCooperativadoDataProvider.criar(sessaoVotacao, voto);
             }
         });
 

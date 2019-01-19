@@ -9,7 +9,7 @@ import cucumber.api.java8.Pt;
 import dataprovider.CooperativadoDataProvider;
 import dataprovider.PautaDataProvider;
 import dataprovider.SessaoVotacaoDataProvider;
-import dataprovider.VotoDataProvider;
+import dataprovider.VotoCooperativadoDataProvider;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -25,7 +25,7 @@ import java.util.Objects;
 @ContextConfiguration(classes = {SessaoVotacaoDataProvider.class,
         PautaDataProvider.class,
         CooperativadoDataProvider.class,
-        VotoDataProvider.class})
+        VotoCooperativadoDataProvider.class})
 public class IncluirVotoPassos extends TestConfig implements Pt {
 
     private final static String URL_INCLUIR_VOTO = "http://localhost:8080/v1/sessoes-votacao/%d/votos";
@@ -37,7 +37,7 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
     @Autowired
     private CooperativadoDataProvider cooperativadoDataProvider;
     @Autowired
-    private VotoDataProvider votoDataProvider;
+    private VotoCooperativadoDataProvider votoCooperativadoDataProvider;
     private SessaoVotacao sessaoVotacao;
 
     public IncluirVotoPassos() {
@@ -59,7 +59,7 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
         });
 
         Dado("^um cooperativado que já votou$", () -> {
-            Cooperativado cooperativado = votoDataProvider.criar(sessaoVotacao).getCooperativado();
+            Cooperativado cooperativado = votoCooperativadoDataProvider.criar(sessaoVotacao).getCooperativado();
             votoInputDto.setIdCooperativado(cooperativado.getId());
         });
 

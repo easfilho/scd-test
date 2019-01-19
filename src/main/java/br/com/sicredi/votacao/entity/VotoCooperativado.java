@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Voto {
+public class VotoCooperativado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
