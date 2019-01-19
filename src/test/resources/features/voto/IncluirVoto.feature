@@ -32,3 +32,19 @@ Funcionalidade: Incluir Voto
     Quando incluir o voto
     Entao o voto não é salvo
     E devo receber um status "PRECONDITION_FAILED"
+
+  Cenario: Deve validar se o cooperativado é informado
+    Dado uma sessão de votação aberta
+    E o cooperativado não é informado
+    E um voto para "true"
+    Quando incluir o voto
+    Entao o voto não é salvo
+    E devo receber um status "BAD_REQUEST"
+
+  Cenario: Deve validar se o cooperativado é informado
+    Dado uma sessão de votação aberta
+    E um cooperativao que ainda não votou
+    E um voto não é informado
+    Quando incluir o voto
+    Entao o voto não é salvo
+    E devo receber um status "BAD_REQUEST"

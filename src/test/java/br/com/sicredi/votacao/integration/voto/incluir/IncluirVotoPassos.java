@@ -39,7 +39,6 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
     @Autowired
     private VotoDataProvider votoDataProvider;
     private SessaoVotacao sessaoVotacao;
-    private Cooperativado cooperativado;
 
     public IncluirVotoPassos() {
         Before(() -> {
@@ -55,20 +54,28 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
         });
 
         Dado("^um cooperativao que ainda não votou$", () -> {
-            cooperativado = cooperativadoDataProvider.criar();
+            Cooperativado cooperativado = cooperativadoDataProvider.criar();
+            votoInputDto.setIdCooperativado(cooperativado.getId());
         });
 
         Dado("^um cooperativado que já votou$", () -> {
-            cooperativado = votoDataProvider.criar(sessaoVotacao).getCooperativado();
+            Cooperativado cooperativado = votoDataProvider.criar(sessaoVotacao).getCooperativado();
+            votoInputDto.setIdCooperativado(cooperativado.getId());
+        });
+
+        Dado("^o cooperativado não é informado$", () -> {
+            votoInputDto.setIdCooperativado(null);
         });
 
         Dado("^um voto para \"([^\"]*)\"$", (Boolean voto) -> {
             votoInputDto.setVoto(voto);
         });
 
-        Quando("^incluir o voto$", () -> {
-            votoInputDto.setIdCooperativado(cooperativado.getId());
+        Dado("^um voto não é informado$", () -> {
+            votoInputDto.setVoto(null);
+        });
 
+        Quando("^incluir o voto$", () -> {
             RestTemplate restTemplate = new RestTemplate();
             String url = formatarUrl(sessaoVotacao);
             HttpEntity<VotoInputDto> request = new HttpEntity<>(votoInputDto);

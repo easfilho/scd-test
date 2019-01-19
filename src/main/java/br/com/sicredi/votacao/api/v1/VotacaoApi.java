@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.stream.Stream;
 
 @RestController
@@ -52,7 +53,7 @@ public class VotacaoApi implements v1 {
 
     @PostMapping(value = "/sessoes-votacao/{idSessaoVotacao}/votos")
     public ResponseEntity<?> incluirVoto(@PathVariable Long idSessaoVotacao,
-                                         @RequestBody VotoInputDto votoInputDto) {
+                                         @Valid @RequestBody VotoInputDto votoInputDto) {
         try {
             votoInputDto.setIdSessaoVotacao(idSessaoVotacao);
             return Stream.of(votoService.incluir(votoInputDto))
