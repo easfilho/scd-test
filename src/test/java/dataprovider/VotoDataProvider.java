@@ -27,4 +27,13 @@ public class VotoDataProvider {
                 .build();
         return votoRepository.save(voto);
     }
+
+    public Voto criar(SessaoVotacao sessaoVotacao, Boolean voto) {
+        Voto votoEntity = Voto.builder()
+                .voto(true)
+                .cooperativado(cooperativadoDataProvider.criar())
+                .sessaoVotacao(sessaoVotacao)
+                .build();
+        return votoRepository.save(votoEntity);
+    }
 }
