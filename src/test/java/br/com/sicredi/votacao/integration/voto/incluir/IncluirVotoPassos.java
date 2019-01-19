@@ -81,6 +81,10 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
             mockarValidacaoCooperativado("UNABLE_TO_VOTE");
         });
 
+        Dado("^o cooperativado possui um cpf inválido$", () -> {
+            mockarCpfInvalido();
+        });
+
         Dado("^o cooperativado não é informado$", () -> {
             votoInputDto.setIdCooperativado(null);
         });
@@ -119,6 +123,14 @@ public class IncluirVotoPassos extends TestConfig implements Pt {
         Entao("^devo receber um status \"([^\"]*)\"$", (HttpStatus httpStatusEsperado) -> {
             Assert.assertEquals(httpStatusEsperado, httpStatus);
         });
+    }
+
+    private void mockarCpfInvalido() {
+        wireMockServer.stubFor(get(WireMock
+                .urlPathEqualTo(String.format("/users/%s", cooperativado.getCpf())))
+                .willReturn(aResponse()
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .withStatus(HttpStatus.NOT_FOUND.value())));
     }
 
     private void mockarValidacaoCooperativado(String status) {

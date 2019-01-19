@@ -29,13 +29,13 @@ public class CooperativadoRestClient implements CooperativadoClient {
                     null,
                     ValidacaoCooperativadoDto.class)
                     .getBody();
-            return StatusCooperativadoEnum.valueOf(validacaoCooperativadoDto.getStatus());
+            return StatusCooperativadoEnum.get(validacaoCooperativadoDto.getStatus());
         } catch (HttpClientErrorException e) {
-            return StatusCooperativadoEnum.UNABLE_TO_VOTE;
+            return StatusCooperativadoEnum.DESABILITADO_PARA_VOTAR;
         }
     }
 
-    public String formatarUrlValidacaoCooperativado(String cpf) {
+    private String formatarUrlValidacaoCooperativado(String cpf) {
         return new StringBuilder()
                 .append(urlValidacaoCooperativado)
                 .append("/users/")

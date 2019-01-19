@@ -22,7 +22,7 @@ Funcionalidade: Incluir Voto
     Dado uma sessão de votação fechada
     E um cooperativado que ainda não votou
     E o cooperativado possui um cpf habilitado para votar
-    E um voto para "<voto>"
+    E um voto para "true"
     Quando incluir o voto
     Entao o voto não é salvo
     E devo receber um status "PRECONDITION_FAILED"
@@ -56,7 +56,16 @@ Funcionalidade: Incluir Voto
     Dado uma sessão de votação fechada
     E um cooperativado que ainda não votou
     E o cooperativado possui um cpf não habilitado para votar
-    E um voto para "<voto>"
+    E um voto para "true"
+    Quando incluir o voto
+    Entao o voto não é salvo
+    E devo receber um status "PRECONDITION_FAILED"
+
+  Cenario: Deve validar cooperativado com cpf inválido
+    Dado uma sessão de votação fechada
+    E um cooperativado que ainda não votou
+    E o cooperativado possui um cpf inválido
+    E um voto para "true"
     Quando incluir o voto
     Entao o voto não é salvo
     E devo receber um status "PRECONDITION_FAILED"
