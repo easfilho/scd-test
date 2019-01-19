@@ -1,6 +1,6 @@
 package br.com.sicredi.votacao.factory;
 
-import br.com.sicredi.votacao.api.v1.VotacaoApi;
+import br.com.sicredi.votacao.api.v1.SessaoVotacaoApi;
 import br.com.sicredi.votacao.api.v1.dto.PautaOutputDto;
 import br.com.sicredi.votacao.api.v1.dto.SessaoVotacaoInputDto;
 import br.com.sicredi.votacao.entity.Pauta;
@@ -24,7 +24,7 @@ public class PautaOutputDtoFactory {
     public PautaOutputDto criar(Pauta pauta) {
         PautaOutputDto pautaOutputDto = modelMapper.map(pauta, PautaOutputDto.class);
         pautaOutputDto.setIdPauta(pauta.getId());
-        pautaOutputDto.add(linkTo(methodOn(VotacaoApi.class)
+        pautaOutputDto.add(linkTo(methodOn(SessaoVotacaoApi.class)
                 .incluirSessaoVotacao(pauta.getId(), new SessaoVotacaoInputDto()))
                 .withRel("SessaoVotacaoOutputDto"));
         return pautaOutputDto;
