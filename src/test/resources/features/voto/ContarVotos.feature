@@ -24,3 +24,11 @@ Funcionalidade: Contar Votos
     E devo receber 0 votos para "true"
     E devo receber 0 votos para "false"
     E devo receber um status "OK"
+
+  Cenario: Deve retornar uma contagem sem votos para uma sessão inexistent
+    Dado uma sessão inexistente
+    Quando contar os votos
+    Então devo receber o total de 0 votos
+    E devo receber 0 votos para "true"
+    E devo receber 0 votos para "false"
+    E devo receber um status "OK"

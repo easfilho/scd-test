@@ -39,6 +39,12 @@ public class ContarVotosPassos extends TestConfig implements Pt {
             sessaoVotacao = sessaoVotacaoDataProvider.criarAberta();
         });
 
+        Dado("^uma sessão inexistente$", () -> {
+            sessaoVotacao = SessaoVotacao.builder()
+                    .id(999L)
+                    .build();
+        });
+
         Dado("^que existem (\\d+) votos para \"([^\"]*)\"$", (Integer numeroVotos, Boolean voto) -> {
             for (int i = 0; i < numeroVotos; i++) {
                 votoCooperativadoDataProvider.criar(sessaoVotacao, voto);
