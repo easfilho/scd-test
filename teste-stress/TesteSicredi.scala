@@ -23,7 +23,7 @@ import scala.concurrent.duration._
 class TesteSicredi extends Simulation {
 
   val httpProtocol = http
-    .baseUrl("http://localhost:8080") 
+    .baseUrl("https://sicredi-teste.herokuapp.com")
     .doNotTrackHeader("1")
     .acceptLanguageHeader("en-US,en;q=0.5")
     .acceptEncodingHeader("gzip, deflate")
@@ -31,7 +31,7 @@ class TesteSicredi extends Simulation {
 
   val headers_10 = Map("Content-Type" -> "application/json")
 
-  val scn = scenario("Teste Stress Avaliação Sicredi") 
+  val scn = scenario("Teste Stress Avaliação Sicredi")
     .exec(http("Contar Votos")
       .get("/v1/sessoes-votacao/1/contagem-votos"))
     .pause(2)
@@ -52,5 +52,5 @@ class TesteSicredi extends Simulation {
         "minutos": 0
         }""".stripMargin)))
     .pause(2)
-  setUp(scn.inject(atOnceUsers(500)).protocols(httpProtocol))
+  setUp(scn.inject(atOnceUsers(300)).protocols(httpProtocol))
 }
