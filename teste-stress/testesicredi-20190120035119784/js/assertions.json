@@ -1,0 +1,10 @@
+{
+  "simulation": "computerdatabase.TesteSicredi",
+  "simulationId": "testesicredi",
+  "start": 1547956279784,
+  "description": "0",
+  "scenarios": ["Teste Stress Avaliação Sicredi"],
+  "assertions": [
+
+  ]
+}
