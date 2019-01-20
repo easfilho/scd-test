@@ -7,6 +7,8 @@ import br.com.sicredi.votacao.service.SessaoVotacaoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +24,14 @@ public class SessaoVotacaoApi implements v1 {
 
     private SessaoVotacaoService sessaoVotacaoService;
     private SessaoVotacaoOutputDtoFactory sessaoVotacaoOutputDtoFactory;
+    private Logger logger;
 
     @Autowired
     public SessaoVotacaoApi(SessaoVotacaoService sessaoVotacaoService,
                             SessaoVotacaoOutputDtoFactory sessaoVotacaoOutputDtoFactory) {
         this.sessaoVotacaoService = sessaoVotacaoService;
         this.sessaoVotacaoOutputDtoFactory = sessaoVotacaoOutputDtoFactory;
+        this.logger = LoggerFactory.getLogger(this.getClass());
     }
 
     @PostMapping(value = "/pautas/{idPauta}/sessoes-votacao")
@@ -40,14 +44,24 @@ public class SessaoVotacaoApi implements v1 {
     })
     public ResponseEntity<?> incluirSessaoVotacao(@PathVariable Long idPauta,
                                                   @RequestBody SessaoVotacaoInputDto sessaoVotacaoInputDto) {
-        sessaoVotacaoInputDto.setIdPauta(idPauta);
-        return Stream.of(sessaoVotacaoInputDto)
-                .map(sessaoVotacaoService::incluir)
-                .map(sessaoVotacaoOutputDtoFactory::criar)
-                .map(sessaoVotacaoOuputDto -> ResponseEntity
-                        .status(HttpStatus.CREATED)
-                        .body(sessaoVotacaoOuputDto))
-                .findFirst()
-                .get();
+        try {
+            sessaoVotacaoInputDto.setIdPauta(idPauta);
+            return Stream.of(sessaoVotacaoInputDto)
+                    .peek(dto -> logger.info("[Abertura-Sessão-Votação] Inciando abertura da sessão de votação com " +
+                            "os dados de entrada: %s", dto))
+                    .map(sessaoVotacaoService::incluir)
+                    .peek(sessaoVotacao -> logger.info("[Abertura-Sessão-Votação] Sessao de votação aberta: %s", sessaoVotacao))
+                    .map(sessaoVotacaoOutputDtoFactory::criar)
+                    .peek(sessaoVotacaoOuputDto -> logger.info("[Abertura-Sessão-Votação] Sessão de votação construída " +
+                            "para retorno: %s", sessaoVotacaoOuputDto))
+                    .map(sessaoVotacaoOuputDto -> ResponseEntity
+                            .status(HttpStatus.CREATED)
+                            .body(sessaoVotacaoOuputDto))
+                    .findFirst()
+                    .get();
+        } catch (Exception e) {
+            logger.info("[Abertura-Sessão-Votação] Erro ao abrir sessão de votação. Erro detalhado: %s", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

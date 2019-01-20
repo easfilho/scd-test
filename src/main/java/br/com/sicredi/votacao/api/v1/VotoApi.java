@@ -9,6 +9,8 @@ import br.com.sicredi.votacao.service.VotoCooperativadoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ public class VotoApi implements v1 {
     private VotoCooperativadoService votoCooperativadoService;
     private VotoOutputDtoFactory votoOutputDtoFactory;
     private ContagemVotosOutputDtoFactory contagemVotosOutputDtoFactory;
+    private Logger logger;
 
     @Autowired
     public VotoApi(VotoCooperativadoService votoCooperativadoService,
@@ -31,6 +34,7 @@ public class VotoApi implements v1 {
         this.votoCooperativadoService = votoCooperativadoService;
         this.votoOutputDtoFactory = votoOutputDtoFactory;
         this.contagemVotosOutputDtoFactory = contagemVotosOutputDtoFactory;
+        this.logger = LoggerFactory.getLogger(this.getClass());
     }
 
     @PostMapping(value = "/sessoes-votacao/{idSessaoVotacao}/votos")
@@ -47,14 +51,20 @@ public class VotoApi implements v1 {
                                          @Valid @RequestBody VotoInputDto votoInputDto) {
         try {
             votoInputDto.setIdSessaoVotacao(idSessaoVotacao);
+            logger.info("[Inclusão-Voto] Iniciando inclusão do voto do cooperativado: %s", votoInputDto);
             return Stream.of(votoCooperativadoService.incluir(votoInputDto))
+                    .peek(votoCooperativado -> logger.info("[Inclusão-Voto] Voto do cooperativados incluído: %s",
+                            votoCooperativado))
                     .map(votoOutputDtoFactory::criar)
+                    .peek(votoOutputDto -> logger.info("[Inclusão-Voto] Voto do cooperativado construído para retorno %s",
+                            votoOutputDto))
                     .map(votoOutputDto -> ResponseEntity
                             .status(HttpStatus.CREATED)
                             .body(votoOutputDto))
                     .findFirst()
                     .get();
         } catch (HttpException e) {
+            logger.info("[Inclusão-Voto] Erro ao incluir voto do cooperativado. Erro detalhado: %s", e.getMessage());
             return Stream.of(e)
                     .map(exception -> ResponseEntity
                             .status(exception.getHttpStatus())
@@ -62,6 +72,7 @@ public class VotoApi implements v1 {
                     .findFirst()
                     .get();
         } catch (Exception e) {
+            logger.info("[Inclusão-Voto] Erro ao incluir voto do cooperativado. Erro detalhado: %s", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
         }
@@ -77,8 +88,12 @@ public class VotoApi implements v1 {
     })
     public ResponseEntity<?> contarVotos(@PathVariable Long idSessaoVotacao) {
         return Stream.of(idSessaoVotacao)
+                .peek(id -> logger.info("[Contagem-Votos] Iniciando contgem de votos da sessão de id %d.", id))
                 .map(votoCooperativadoService::contarVotos)
+                .peek(contegensVotos -> logger.info("[Contagem-Votos] Votos contados %s", contegensVotos))
                 .map(contagemVotosOutputDtoFactory::criar)
+                .peek(contagemVotosOutputDto -> logger.info("Contagem-Votos] Contagem de votos construída para retorno %s",
+                        contagemVotosOutputDto))
                 .map(ResponseEntity::ok)
                 .findFirst()
                 .get();

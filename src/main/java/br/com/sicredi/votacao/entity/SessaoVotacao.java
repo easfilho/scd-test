@@ -1,6 +1,8 @@
 package br.com.sicredi.votacao.entity;
 
 import lombok.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -30,5 +32,10 @@ public class SessaoVotacao {
     public Boolean cooperativadoAindaNaoVotou(Cooperativado cooperativado) {
         return votosCooperativados.isEmpty() || votosCooperativados.stream()
                 .anyMatch(voto -> !voto.foiDeCooperativado(cooperativado));
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 }

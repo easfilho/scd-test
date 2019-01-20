@@ -1,6 +1,8 @@
 package br.com.sicredi.votacao.entity;
 
 import lombok.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 
@@ -24,5 +26,10 @@ public class VotoCooperativado {
 
     public Boolean foiDeCooperativado(Cooperativado cooperativado) {
         return this.cooperativado.getId().equals(cooperativado.getId());
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 }
