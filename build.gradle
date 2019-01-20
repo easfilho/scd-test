@@ -44,3 +44,7 @@ dependencies {
 	testImplementation 'info.cukes:gherkin:2.12.2'
     testImplementation 'com.github.tomakehurst:wiremock-standalone:2.20.0'
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.10.2'
+}
