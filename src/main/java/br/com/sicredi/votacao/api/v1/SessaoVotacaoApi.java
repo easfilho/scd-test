@@ -36,8 +36,8 @@ public class SessaoVotacaoApi implements v1 {
 
     @PostMapping(value = "/pautas/{idPauta}/sessoes-votacao")
     @ApiOperation(value = "Api para abrir uma sessão de votação",
-            notes = "A sessão de votação ficará aberta pelo tempo que for passado através do parâmetro do body" +
-                    " tempoAberturaSessao. Caso não seja informado nenhum valor a sessão ficará aberta por 1 minuto")
+            notes = "A sessão de votação ficará aberta pelo tempo que for passado através dos parâmetro do body" +
+                    " horas e minutos. Caso não seja informado nenhum valor a sessão ficará aberta por 1 minuto")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Abertura da sessão de votação realizada com sucesso",
                     response = PautaOutputDto.class),
