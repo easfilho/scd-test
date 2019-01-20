@@ -24,6 +24,14 @@ jacoco {
     reportsDir = file("$buildDir/customJacocoReportDir")
 }
 
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: ['**/*Dto**'])
+        })
+    }
+}
 group = 'br.com.sicredi'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
