@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 
 @Component
@@ -26,13 +25,14 @@ public class SessaoVotacaoFactory {
         return SessaoVotacao.builder()
                 .pauta(pautaRepository.findById(sessaoVotacaoInputDto.getIdPauta())
                         .orElseThrow(EntityNotFoundException::new))
-                .validade(calcularDataValidade(sessaoVotacaoInputDto.getTempoAberturaSessao()))
+                .validade(calcularDataValidade(sessaoVotacaoInputDto.getHoras(), sessaoVotacaoInputDto.getMinutos()))
                 .build();
     }
 
-    private LocalDateTime calcularDataValidade(LocalTime tempoAbertuaSessao) {
-        return Optional.ofNullable(tempoAbertuaSessao)
-                .map(tempo -> LocalDateTime.now().plusHours(tempo.getHour()).plusMinutes(tempo.getMinute()))
-                .orElse(LocalDateTime.now().plusMinutes(TEMPO_ABERTURA_DEFAULT));
+    private LocalDateTime calcularDataValidade(Integer horas, Integer minutos) {
+        if (Optional.ofNullable(horas).isPresent() && Optional.ofNullable(minutos).isPresent()) {
+            return LocalDateTime.now().plusHours(horas).plusMinutes(minutos);
+        }
+        return LocalDateTime.now().plusMinutes(TEMPO_ABERTURA_DEFAULT);
     }
 }

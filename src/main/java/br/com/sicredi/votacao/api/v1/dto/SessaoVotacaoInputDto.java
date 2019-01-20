@@ -6,14 +6,13 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.time.LocalTime;
-
 @Getter
 @Setter
 public class SessaoVotacaoInputDto {
     @JsonIgnore
     private Long idPauta;
-    private LocalTime tempoAberturaSessao;
+    private Integer horas;
+    private Integer minutos;
 
     @Override
     public String toString() {

@@ -43,11 +43,13 @@ public class AbrirSessaoVotacaoPassos extends TestConfig implements Pt {
 
         Dado("^que o tempo de votação é de \"([^\"]*)\"$", (String tempoVotacao) -> {
             tempoInformado = LocalTime.parse(tempoVotacao);
-            sessaoVotacaoInputDto.setTempoAberturaSessao(tempoInformado);
+            sessaoVotacaoInputDto.setHoras(tempoInformado.getHour());
+            sessaoVotacaoInputDto.setMinutos(tempoInformado.getMinute());
         });
 
         Dado("^que não é inforamdo o tempo de votação$", () -> {
-            sessaoVotacaoInputDto.setTempoAberturaSessao(null);
+            sessaoVotacaoInputDto.setHoras(null);
+            sessaoVotacaoInputDto.setMinutos(null);
         });
 
         Quando("^abrir a sessão de votação$", () -> {
