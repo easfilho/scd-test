@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class HttpException extends Exception {
 
-    private HttpStatus httpStatus;
+    private final HttpStatus httpStatus;
 
     public HttpException(HttpStatus httpStatus, String message) {
         super(message);
