@@ -24,6 +24,10 @@ public class SessaoVotacaoOutputDtoFactory {
                 .incluirVoto(sessaoVotacao.getId(), new VotoInputDto()))
                 .withRel("VotoOutputDto"));
 
+        sessaoVotacaoOuputDto.add(linkTo(methodOn(VotoApi.class)
+                .contarVotos(sessaoVotacao.getId()))
+                .withRel("ContagemVotosOutputDto"));
+
         return sessaoVotacaoOuputDto;
     }
 }
