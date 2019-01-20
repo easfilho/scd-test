@@ -23,7 +23,7 @@ cache:
   - '$HOME/.gradle'
 
 script:
-  ./gradlew clean build sonarqube \
+  ./gradlew sonarqube \
   -Dsonar.projectKey=easfilho_scd-test \
   -Dsonar.organization=easfilho-github \
   -Dsonar.host.url=https://sonarcloud.io \
