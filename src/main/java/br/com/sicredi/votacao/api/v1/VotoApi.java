@@ -64,10 +64,10 @@ public class VotoApi implements v1 {
                     .findFirst()
                     .orElseThrow(NoSuchFieldException::new);
         } catch (HttpException e) {
-            logger.info("[Inclusão-Voto] Erro ao incluir voto do cooperativado. Erro detalhado: %s", e.getMessage());
+            logger.info("[Inclusão-Voto] Erro ao incluir voto do cooperativado. Erro detalhado: {}", e.getMessage());
             return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
         } catch (Exception e) {
-            logger.info("[Inclusão-Voto] Erro ao incluir voto do cooperativado. Erro detalhado: %s", e.getMessage());
+            logger.info("[Inclusão-Voto] Erro ao incluir voto do cooperativado. Erro detalhado: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
