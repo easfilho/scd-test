@@ -37,7 +37,7 @@ public class PautaApi implements v1 {
     @ApiOperation(value = "Api para incluir pautas",
             notes = "Faz a inclusão de uma pauta, caso não seja informado o assunto retornará um erro.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Inclusão da pauta realizada com sucesso", response = PautaOutputDto.class),
+            @ApiResponse(code = 201, message = "Inclusão da pauta realizada com sucesso", response = PautaOutputDto.class),
     })
     public ResponseEntity<?> incluirPauta(@Valid @RequestBody PautaInputDto pautaInputDto) {
         try {
