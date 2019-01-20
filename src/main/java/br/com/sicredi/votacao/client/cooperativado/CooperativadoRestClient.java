@@ -38,7 +38,7 @@ public class CooperativadoRestClient implements CooperativadoClient {
             logger.info("[Validação-Cpf] Resultado da validação do cpf {}: {}", cpf, validacaoCooperativadoDto);
             return StatusCooperativadoEnum.get(validacaoCooperativadoDto.getStatus());
         } catch (HttpClientErrorException e) {
-            logger.info("[Validação-Cpf] Cpf inválido %s. Detalhe erro {}", cpf, e.getMessage());
+            logger.info("[Validação-Cpf] Cpf inválido {}. Detalhe erro {}", cpf, e.getMessage());
             return StatusCooperativadoEnum.DESABILITADO_PARA_VOTAR;
         }
     }
