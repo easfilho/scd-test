@@ -4,8 +4,6 @@ dist: trusty
 addons:
   sonarcloud:
     organization: "easfilho-github"
-    token:
-      secure: 61525fe54957457b667a48545f758bc3decc7b9e # encrypted value of your token
 script:
   ./gradlew build sonarqube \
   -Dsonar.projectKey=easfilho_scd-test \
