@@ -30,10 +30,9 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        List<ResponseMessage> defaultResponses = new ArrayList<ResponseMessage>() {{
-            add(buildResponseMessage(HttpStatus.PRECONDITION_FAILED, "Falha da pré-conidção"));
-            add(buildResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno"));
-        }};
+        List<ResponseMessage> defaultResponses = new ArrayList<>();
+        defaultResponses.add(buildResponseMessage(HttpStatus.PRECONDITION_FAILED, "Falha da pré-conidção"));
+        defaultResponses.add(buildResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno"));
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .globalResponseMessage(RequestMethod.POST, defaultResponses)

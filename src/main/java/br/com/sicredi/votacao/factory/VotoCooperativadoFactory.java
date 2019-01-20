@@ -2,9 +2,7 @@ package br.com.sicredi.votacao.factory;
 
 import br.com.sicredi.votacao.api.v1.dto.VotoInputDto;
 import br.com.sicredi.votacao.client.cooperativado.CooperativadoClient;
-import br.com.sicredi.votacao.entity.SessaoVotacao;
 import br.com.sicredi.votacao.entity.VotoCooperativado;
-import br.com.sicredi.votacao.enumerator.StatusCooperativadoEnum;
 import br.com.sicredi.votacao.exception.IllegalStateException;
 import br.com.sicredi.votacao.repository.CooperativadoRepository;
 import br.com.sicredi.votacao.repository.SessaoVotacaoRepository;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @Component
 public class VotoCooperativadoFactory {
@@ -44,16 +41,26 @@ public class VotoCooperativadoFactory {
     }
 
     private void validar(VotoCooperativado votoCooperativado) throws IllegalStateException {
-        Optional.of(votoCooperativado.getSessaoVotacao())
-                .filter(SessaoVotacao::isAberta)
-                .orElseThrow(() -> new IllegalStateException("Sessão encerrada"));
+        validarSessaoAberta(votoCooperativado);
+        validarCooperativadoJaVotou(votoCooperativado);
+        validarCpfCooperativado(votoCooperativado);
+    }
 
-        Optional.of(votoCooperativado.getSessaoVotacao())
-                .filter(sessaoVotacao -> sessaoVotacao.cooperativadoAindaNaoVotou(votoCooperativado.getCooperativado()))
-                .orElseThrow(() -> new IllegalStateException("Cooperativado já votou"));
+    private void validarCpfCooperativado(VotoCooperativado votoCooperativado) throws IllegalStateException {
+        if (!cooperativadoClient.validarCpf(votoCooperativado.getCooperativado().getCpf()).habilitadoParaVotar()) {
+            throw new IllegalStateException("Cooperativado não está habilitado para votar");
+        }
+    }
 
-        Optional.of(cooperativadoClient.validarCpf(votoCooperativado.getCooperativado().getCpf()))
-                .filter(StatusCooperativadoEnum::habilitadoParaVotar)
-                .orElseThrow(() -> new IllegalStateException("Cooperativado não está habilitado para votar"));
+    private void validarCooperativadoJaVotou(VotoCooperativado votoCooperativado) throws IllegalStateException {
+        if (!votoCooperativado.getSessaoVotacao().cooperativadoAindaNaoVotou(votoCooperativado.getCooperativado())) {
+            throw new IllegalStateException("Cooperativado já votou");
+        }
+    }
+
+    private void validarSessaoAberta(VotoCooperativado votoCooperativado) throws IllegalStateException {
+        if (!votoCooperativado.getSessaoVotacao().isAberta()) {
+            throw new IllegalStateException("Sessão encerrada");
+        }
     }
 }
