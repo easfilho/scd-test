@@ -92,7 +92,7 @@ public class VotoApi implements v1 {
                 .map(votoCooperativadoService::contarVotos)
                 .peek(contegensVotos -> logger.info("[Contagem-Votos] Votos contados %s", contegensVotos))
                 .map(contagemVotosOutputDtoFactory::criar)
-                .peek(contagemVotosOutputDto -> logger.info("Contagem-Votos] Contagem de votos construída para retorno %s",
+                .peek(contagemVotosOutputDto -> logger.info("[Contagem-Votos] Contagem de votos construída para retorno %s",
                         contagemVotosOutputDto))
                 .map(ResponseEntity::ok)
                 .findFirst()
