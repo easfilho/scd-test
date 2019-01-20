@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.util.stream.Stream;
 
 @RestController
-public class VotoApi implements v1 {
+public class VotoApi implements V1 {
 
     private VotoCooperativadoService votoCooperativadoService;
     private VotoOutputDtoFactory votoOutputDtoFactory;

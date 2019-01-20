@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.stream.Stream;
 
 @RestController
-public class SessaoVotacaoApi implements v1 {
+public class SessaoVotacaoApi implements V1 {
 
     private SessaoVotacaoService sessaoVotacaoService;
     private SessaoVotacaoOutputDtoFactory sessaoVotacaoOutputDtoFactory;

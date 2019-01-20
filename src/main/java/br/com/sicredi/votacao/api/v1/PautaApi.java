@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.util.stream.Stream;
 
 @RestController
-public class PautaApi implements v1 {
+public class PautaApi implements V1 {
 
     private PautaService pautaService;
     private PautaOutputDtoFactory pautaOutputDtoFactory;
