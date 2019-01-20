@@ -49,7 +49,7 @@ public class PautaApi implements v1 {
                     .peek(pautaOutputDto -> logger.info("[Inclusão-Pauta] Pauta construída para retorno: {}", pautaOutputDto))
                     .map(pautaOutputDto -> ResponseEntity.status(HttpStatus.CREATED).body(pautaOutputDto))
                     .findFirst()
-                    .get();
+                    .orElseThrow(NoSuchFieldException::new);
         } catch (Exception e) {
             logger.info("[Inclusão-Pauta] Erro ao incluir pauta. Erro detalhado: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
