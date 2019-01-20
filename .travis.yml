@@ -9,9 +9,22 @@ branches:
   only:
   - master
 
+sudo: false
+dist: trusty
+addons:
+  sonarcloud:
+    organization: "easfilho-github"
+  token:
+    secure: 61525fe54957457b667a48545f758bc3decc7b9e
+
 cache:
   directories:
   - '$HOME/.m2/repository'
   - '$HOME/.gradle'
 
-script: "./gradlew clean build"
+script:
+  ./gradlew clean build sonarqube \
+  -Dsonar.projectKey=easfilho_scd-test \
+  -Dsonar.organization=easfilho-github \
+  -Dsonar.host.url=https://sonarcloud.io \
+  -Dsonar.login=61525fe54957457b667a48545f758bc3decc7b9e
