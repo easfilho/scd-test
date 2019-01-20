@@ -1,8 +1,12 @@
 package br.com.sicredi.votacao.api.v1;
 
 import br.com.sicredi.votacao.api.v1.dto.PautaInputDto;
+import br.com.sicredi.votacao.api.v1.dto.PautaOutputDto;
 import br.com.sicredi.votacao.factory.PautaOutputDtoFactory;
 import br.com.sicredi.votacao.service.PautaService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +30,11 @@ public class PautaApi implements v1 {
     }
 
     @PostMapping(value = "/pautas")
+    @ApiOperation(value = "Api para incluir pautas",
+            notes = "Faz a inclusão de uma pauta, caso não seja informado o assunto retornará um erro.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Inclusão da pauta realizada com sucesso", response = PautaOutputDto.class),
+    })
     public ResponseEntity<?> incluirPauta(@Valid @RequestBody PautaInputDto pautaInputDto) {
         return Stream.of(pautaInputDto)
                 .map(pautaService::incluir)
