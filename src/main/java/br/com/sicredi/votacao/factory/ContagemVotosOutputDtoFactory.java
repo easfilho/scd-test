@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public class ContagemVotosOutputDtoFactory {
 
-    private final static Long NENHUM_VOTO = 0L;
+    private static final Long NENHUM_VOTO = 0L;
 
     public ContagemVotosOutputDto criar(List<ContagemVotos> contagensVotos) {
         Long votoSim = contagensVotos.stream()

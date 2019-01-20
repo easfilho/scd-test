@@ -13,7 +13,7 @@ import java.util.Optional;
 @Component
 public class SessaoVotacaoFactory {
 
-    private final static Long TEMPO_ABERTURA_DEFAULT = 1L;
+    private static final Long TEMPO_ABERTURA_DEFAULT = 1L;
     private PautaRepository pautaRepository;
 
     @Autowired
