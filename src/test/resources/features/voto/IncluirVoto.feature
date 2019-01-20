@@ -53,7 +53,7 @@ Funcionalidade: Incluir Voto
     E devo receber um status "BAD_REQUEST"
 
   Cenario: Deve validar cooperativado com cpf não habilitado para votar
-    Dado uma sessão de votação fechada
+    Dado uma sessão de votação aberta
     E um cooperativado que ainda não votou
     E o cooperativado possui um cpf não habilitado para votar
     E um voto para "true"
