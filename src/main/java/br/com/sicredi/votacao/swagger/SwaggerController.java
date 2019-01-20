@@ -11,7 +11,7 @@ import java.io.IOException;
 @ApiIgnore
 public class SwaggerController {
 
-    @GetMapping(value = "/swagger")
+    @GetMapping(value = "/")
     public void index(HttpServletResponse response) throws IOException {
         response.sendRedirect("swagger-ui.html");
     }
