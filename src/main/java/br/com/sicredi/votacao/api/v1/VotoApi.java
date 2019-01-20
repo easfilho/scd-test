@@ -62,19 +62,13 @@ public class VotoApi implements v1 {
                             .status(HttpStatus.CREATED)
                             .body(votoOutputDto))
                     .findFirst()
-                    .get();
+                    .orElseThrow(NoSuchFieldException::new);
         } catch (HttpException e) {
             logger.info("[Inclusão-Voto] Erro ao incluir voto do cooperativado. Erro detalhado: %s", e.getMessage());
-            return Stream.of(e)
-                    .map(exception -> ResponseEntity
-                            .status(exception.getHttpStatus())
-                            .body(exception.getMessage()))
-                    .findFirst()
-                    .get();
+            return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
         } catch (Exception e) {
             logger.info("[Inclusão-Voto] Erro ao incluir voto do cooperativado. Erro detalhado: %s", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -87,15 +81,20 @@ public class VotoApi implements v1 {
                     response = VotoOutputDto.class),
     })
     public ResponseEntity<?> contarVotos(@PathVariable Long idSessaoVotacao) {
-        return Stream.of(idSessaoVotacao)
-                .peek(id -> logger.info("[Contagem-Votos] Iniciando contgem de votos da sessão de id {}", id))
-                .map(votoCooperativadoService::contarVotos)
-                .peek(contegensVotos -> logger.info("[Contagem-Votos] Votos contados {}", contegensVotos))
-                .map(contagemVotosOutputDtoFactory::criar)
-                .peek(contagemVotosOutputDto -> logger.info("[Contagem-Votos] Contagem de votos construída para retorno {}",
-                        contagemVotosOutputDto))
-                .map(ResponseEntity::ok)
-                .findFirst()
-                .get();
+        try {
+            return Stream.of(idSessaoVotacao)
+                    .peek(id -> logger.info("[Contagem-Votos] Iniciando contgem de votos da sessão de id {}", id))
+                    .map(votoCooperativadoService::contarVotos)
+                    .peek(contegensVotos -> logger.info("[Contagem-Votos] Votos contados {}", contegensVotos))
+                    .map(contagemVotosOutputDtoFactory::criar)
+                    .peek(contagemVotosOutputDto -> logger.info("[Contagem-Votos] Contagem de votos construída para retorno {}",
+                            contagemVotosOutputDto))
+                    .map(ResponseEntity::ok)
+                    .findFirst()
+                    .orElseThrow(NoSuchFieldException::new);
+        } catch (Exception e) {
+            logger.info("[Contagem-Votos] Erro ao contar votos. Erro detalhado: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

@@ -58,7 +58,7 @@ public class SessaoVotacaoApi implements v1 {
                             .status(HttpStatus.CREATED)
                             .body(sessaoVotacaoOuputDto))
                     .findFirst()
-                    .get();
+                    .orElseThrow(NoSuchFieldException::new);
         } catch (Exception e) {
             logger.info("[Abertura-Sessão-Votação] Erro ao abrir sessão de votação. Erro detalhado: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
