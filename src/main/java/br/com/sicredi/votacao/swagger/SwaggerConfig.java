@@ -1,7 +1,5 @@
 package br.com.sicredi.votacao.swagger;
 
-import com.fasterxml.classmate.TypeResolver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -20,13 +18,6 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-
-    private TypeResolver typeResolver;
-
-    @Autowired
-    public SwaggerConfig(TypeResolver typeResolver) {
-        this.typeResolver = typeResolver;
-    }
 
     @Bean
     public Docket api() {
