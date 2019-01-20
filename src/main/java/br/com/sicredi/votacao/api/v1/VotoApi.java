@@ -51,12 +51,12 @@ public class VotoApi implements V1 {
                                          @Valid @RequestBody VotoInputDto votoInputDto) {
         try {
             votoInputDto.setIdSessaoVotacao(idSessaoVotacao);
-            logger.info("[Inclusão-Voto] Iniciando inclusão do voto do cooperativado: %s", votoInputDto);
+            logger.info("[Inclusão-Voto] Iniciando inclusão do voto do cooperativado: {}", votoInputDto);
             return Stream.of(votoCooperativadoService.incluir(votoInputDto))
-                    .peek(votoCooperativado -> logger.info("[Inclusão-Voto] Voto do cooperativados incluído: %s",
+                    .peek(votoCooperativado -> logger.info("[Inclusão-Voto] Voto do cooperativados incluído: {}",
                             votoCooperativado))
                     .map(votoOutputDtoFactory::criar)
-                    .peek(votoOutputDto -> logger.info("[Inclusão-Voto] Voto do cooperativado construído para retorno %s",
+                    .peek(votoOutputDto -> logger.info("[Inclusão-Voto] Voto do cooperativado construído para retorno {}",
                             votoOutputDto))
                     .map(votoOutputDto -> ResponseEntity
                             .status(HttpStatus.CREATED)
