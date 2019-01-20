@@ -88,11 +88,11 @@ public class VotoApi implements v1 {
     })
     public ResponseEntity<?> contarVotos(@PathVariable Long idSessaoVotacao) {
         return Stream.of(idSessaoVotacao)
-                .peek(id -> logger.info("[Contagem-Votos] Iniciando contgem de votos da sessão de id %d.", id))
+                .peek(id -> logger.info("[Contagem-Votos] Iniciando contgem de votos da sessão de id {}", id))
                 .map(votoCooperativadoService::contarVotos)
-                .peek(contegensVotos -> logger.info("[Contagem-Votos] Votos contados %s", contegensVotos))
+                .peek(contegensVotos -> logger.info("[Contagem-Votos] Votos contados {}", contegensVotos))
                 .map(contagemVotosOutputDtoFactory::criar)
-                .peek(contagemVotosOutputDto -> logger.info("[Contagem-Votos] Contagem de votos construída para retorno %s",
+                .peek(contagemVotosOutputDto -> logger.info("[Contagem-Votos] Contagem de votos construída para retorno {}",
                         contagemVotosOutputDto))
                 .map(ResponseEntity::ok)
                 .findFirst()

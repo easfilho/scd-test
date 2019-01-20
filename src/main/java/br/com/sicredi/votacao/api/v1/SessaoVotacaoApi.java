@@ -39,7 +39,7 @@ public class SessaoVotacaoApi implements v1 {
             notes = "A sessão de votação ficará aberta pelo tempo que for passado através do parâmetro do body" +
                     " tempoAberturaSessao. Caso não seja informado nenhum valor a sessão ficará aberta por 1 minuto")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Abertura da sessão de votação realizada com sucesso",
+            @ApiResponse(code = 201, message = "Abertura da sessão de votação realizada com sucesso",
                     response = PautaOutputDto.class),
     })
     public ResponseEntity<?> incluirSessaoVotacao(@PathVariable Long idPauta,
@@ -48,19 +48,19 @@ public class SessaoVotacaoApi implements v1 {
             sessaoVotacaoInputDto.setIdPauta(idPauta);
             return Stream.of(sessaoVotacaoInputDto)
                     .peek(dto -> logger.info("[Abertura-Sessão-Votação] Inciando abertura da sessão de votação com " +
-                            "os dados de entrada: %s", dto))
+                            "os dados de entrada: {}", dto))
                     .map(sessaoVotacaoService::incluir)
-                    .peek(sessaoVotacao -> logger.info("[Abertura-Sessão-Votação] Sessao de votação aberta: %s", sessaoVotacao))
+                    .peek(sessaoVotacao -> logger.info("[Abertura-Sessão-Votação] Sessao de votação aberta: {}", sessaoVotacao))
                     .map(sessaoVotacaoOutputDtoFactory::criar)
                     .peek(sessaoVotacaoOuputDto -> logger.info("[Abertura-Sessão-Votação] Sessão de votação construída " +
-                            "para retorno: %s", sessaoVotacaoOuputDto))
+                            "para retorno: {}", sessaoVotacaoOuputDto))
                     .map(sessaoVotacaoOuputDto -> ResponseEntity
                             .status(HttpStatus.CREATED)
                             .body(sessaoVotacaoOuputDto))
                     .findFirst()
                     .get();
         } catch (Exception e) {
-            logger.info("[Abertura-Sessão-Votação] Erro ao abrir sessão de votação. Erro detalhado: %s", e.getMessage());
+            logger.info("[Abertura-Sessão-Votação] Erro ao abrir sessão de votação. Erro detalhado: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

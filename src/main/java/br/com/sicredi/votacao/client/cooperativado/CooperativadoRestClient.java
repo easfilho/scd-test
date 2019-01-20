@@ -29,16 +29,16 @@ public class CooperativadoRestClient implements CooperativadoClient {
     public StatusCooperativadoEnum validarCpf(String cpf) {
         try {
             String url = formatarUrlValidacaoCooperativado(cpf);
-            logger.info("[Validação-Cpf] Iniciando validação do cpf através da url %s", url);
+            logger.info("[Validação-Cpf] Iniciando validação do cpf através na url {}", url);
             ValidacaoCooperativadoDto validacaoCooperativadoDto = restTemplate.exchange(url,
                     HttpMethod.GET,
                     null,
                     ValidacaoCooperativadoDto.class)
                     .getBody();
-            logger.info("[Validação-Cpf] Resultado da validação do cpf %s: %s", cpf, validacaoCooperativadoDto);
+            logger.info("[Validação-Cpf] Resultado da validação do cpf {}: {}", cpf, validacaoCooperativadoDto);
             return StatusCooperativadoEnum.get(validacaoCooperativadoDto.getStatus());
         } catch (HttpClientErrorException e) {
-            logger.info("[Validação-Cpf] Cpf inválido %s. Detalhe erro %s", cpf, e.getMessage());
+            logger.info("[Validação-Cpf] Cpf inválido %s. Detalhe erro {}", cpf, e.getMessage());
             return StatusCooperativadoEnum.DESABILITADO_PARA_VOTAR;
         }
     }

@@ -42,16 +42,16 @@ public class PautaApi implements v1 {
     public ResponseEntity<?> incluirPauta(@Valid @RequestBody PautaInputDto pautaInputDto) {
         try {
             return Stream.of(pautaInputDto)
-                    .peek(dto -> logger.info("[Inclusão-Pauta] Iniciando inclusão da pauta com dados de entrada: %s", dto))
+                    .peek(dto -> logger.info("[Inclusão-Pauta] Iniciando inclusão da pauta com dados de entrada: {}", dto))
                     .map(pautaService::incluir)
-                    .peek(pauta -> logger.info("[Inclusão-Pauta] Pauta incluída: %s", pauta))
+                    .peek(pauta -> logger.info("[Inclusão-Pauta] Pauta incluída: {}", pauta))
                     .map(pautaOutputDtoFactory::criar)
-                    .peek(pautaOutputDto -> logger.info("[Inclusão-Pauta] Pauta construída para retorno: %s", pautaOutputDto))
+                    .peek(pautaOutputDto -> logger.info("[Inclusão-Pauta] Pauta construída para retorno: {}", pautaOutputDto))
                     .map(pautaOutputDto -> ResponseEntity.status(HttpStatus.CREATED).body(pautaOutputDto))
                     .findFirst()
                     .get();
         } catch (Exception e) {
-            logger.info("[Inclusão-Pauta] Erro ao incluir pauta. Erro detalhado: %s", e.getMessage());
+            logger.info("[Inclusão-Pauta] Erro ao incluir pauta. Erro detalhado: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
